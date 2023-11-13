@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -31,43 +30,63 @@ public class AlumnoController {
 
     @GetMapping(path = "/{id}", produces = "application/json")
     public ResponseEntity<Object> getAlumnoById(@PathVariable("id") int id) {
-        Optional<Alumno> alumno = alumnoService.getAlumnoById(id);
-        if (alumno.isPresent()) {
-            return new ResponseEntity<>(alumno, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Alumno not found", HttpStatus.NOT_FOUND);
+        try {
+
+            Optional<Alumno> alumno = alumnoService.getAlumnoById(id);
+            if (alumno.isPresent()) {
+                return new ResponseEntity<>(alumno, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Alumno not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<Object> createAlumno( @RequestBody Alumno alumno) {
-        if (validateAlumno(alumno)) {
-            Alumno createdAlumno = alumnoService.createAlumno(alumno);
-            return new ResponseEntity<>(createdAlumno, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>("Can not create Alumno", HttpStatus.BAD_REQUEST);
+        try {
+
+            if (validateAlumno(alumno)) {
+                Alumno createdAlumno = alumnoService.createAlumno(alumno);
+                return new ResponseEntity<>(createdAlumno, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>("Can not create Alumno", HttpStatus.BAD_REQUEST);
+            }
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json" )
     public ResponseEntity<Object> updateAlumno(@PathVariable("id") int id, @RequestBody Alumno alumno) {
-        if (!validateAlumno(alumno)) {
-            return new ResponseEntity<>("Can not update Alumno", HttpStatus.BAD_REQUEST);
-        }
-        Alumno updatedAlumno = alumnoService.updateAlumno(id, alumno);
-        if (updatedAlumno != null) {
-            return new ResponseEntity<>(updatedAlumno, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Alumno not found", HttpStatus.NOT_FOUND);
+        try {
+
+            if (!validateAlumno(alumno)) {
+                return new ResponseEntity<>("Can not update Alumno", HttpStatus.BAD_REQUEST);
+            }
+            Alumno updatedAlumno = alumnoService.updateAlumno(id, alumno);
+            if (updatedAlumno != null) {
+                return new ResponseEntity<>(updatedAlumno, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Alumno not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<Object> deleteAlumno(@PathVariable int id) {
-        if(alumnoService.deleteAlumno(id)) {
-            return new ResponseEntity<>("Alumno deleted successfully", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Alumno not found", HttpStatus.NOT_FOUND);
+        try {
+
+            if(alumnoService.deleteAlumno(id)) {
+                return new ResponseEntity<>("Alumno deleted successfully", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Alumno not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
