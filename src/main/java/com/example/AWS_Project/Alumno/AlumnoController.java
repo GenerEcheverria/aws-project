@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -30,7 +31,6 @@ public class AlumnoController {
 
     @GetMapping(path = "/{id}", produces = "application/json")
     public ResponseEntity<Object> getAlumnoById(@PathVariable("id") int id) {
-        System.out.println("controller");
         Optional<Alumno> alumno = alumnoService.getAlumnoById(id);
         if (alumno.isPresent()) {
             return new ResponseEntity<>(alumno, HttpStatus.OK);
@@ -40,13 +40,20 @@ public class AlumnoController {
     }
     
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Object> createAlumno(@RequestBody Alumno alumno) {
-        Alumno createdAlumno = alumnoService.createAlumno(alumno);
-        return new ResponseEntity<>(createdAlumno, HttpStatus.CREATED);
+    public ResponseEntity<Object> createAlumno( @RequestBody Alumno alumno) {
+        if (validateAlumno(alumno)) {
+            Alumno createdAlumno = alumnoService.createAlumno(alumno);
+            return new ResponseEntity<>(createdAlumno, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("Can not create Alumno", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json" )
     public ResponseEntity<Object> updateAlumno(@PathVariable("id") int id, @RequestBody Alumno alumno) {
+        if (!validateAlumno(alumno)) {
+            return new ResponseEntity<>("Can not update Alumno", HttpStatus.BAD_REQUEST);
+        }
         Alumno updatedAlumno = alumnoService.updateAlumno(id, alumno);
         if (updatedAlumno != null) {
             return new ResponseEntity<>(updatedAlumno, HttpStatus.OK);
@@ -57,7 +64,29 @@ public class AlumnoController {
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<Object> deleteAlumno(@PathVariable int id) {
-        alumnoService.deleteAlumno(id);
-        return new ResponseEntity<>("Alumno deleted successfully", HttpStatus.OK);
+        if(alumnoService.deleteAlumno(id)) {
+            return new ResponseEntity<>("Alumno deleted successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Alumno not found", HttpStatus.NOT_FOUND);
+        }
     }
+
+    private boolean validateAlumno(Alumno alumno) {
+        if (alumno == null) {
+            return false;
+        }
+        if (alumno.getNombres() == null || alumno.getNombres().isEmpty()) {
+            return false;
+        }
+        if (alumno.getApellidos() == null || alumno.getApellidos().isEmpty()) {
+            return false;
+        }
+        if (alumno.getMatricula() == null || alumno.getMatricula().isEmpty()) {
+            return false;
+        }
+        if (alumno.getPromedio() < 0) {
+            return false;
+        }
+        return true;
+    }    
 }

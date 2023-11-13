@@ -19,11 +19,11 @@ public class AlumnoRepository {
     }
 
     public Alumno save(Alumno alumno) {
-        if (alumnos.size() > 0) {
-            alumno.setId(alumnos.get(alumnos.size() - 1).getId() + 1);
-        } else {
-            alumno.setId(1);
-        }
+        // if (alumnos.size() > 0) {
+        //     alumno.setId(alumnos.get(alumnos.size() - 1).getId() + 1);
+        // } else {
+        //     alumno.setId(1);
+        // }
         alumnos.add(alumno);
         return alumno;
     }
@@ -42,11 +42,12 @@ public class AlumnoRepository {
         return updatedAlumno;
     }
 
-    public void deleteById(int id) {
-        alumnos.removeIf(alumno -> alumno.getId() == id);
+    public boolean deleteById(int id) {
+       return alumnos.removeIf(alumno -> alumno.getId() == id);
     }
 
     public boolean existsById(int id) {
         return alumnos.stream().anyMatch(alumno -> alumno.getId() == id);
     }
+
 }

@@ -31,7 +31,11 @@ public class AlumnoService {
         }
     }
 
-    public void deleteAlumno(int alumnoId) {
-        alumnoRepository.deleteById(alumnoId);
+    public boolean deleteAlumno(int alumnoId) {
+         if (alumnoRepository.existsById(alumnoId)) {
+            return alumnoRepository.deleteById(alumnoId);
+        } else {
+            return false;
+        }
     }
 }

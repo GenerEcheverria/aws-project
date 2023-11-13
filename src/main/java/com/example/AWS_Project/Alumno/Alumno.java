@@ -6,11 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 public class Alumno {
     @Id
@@ -19,6 +17,6 @@ public class Alumno {
     @Basic
     private String nombres;
     private String apellidos;
-    private int matricula;
-    private float promedio;
+    private String matricula;
+    private double promedio;
 }
