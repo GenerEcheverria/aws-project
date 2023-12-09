@@ -23,17 +23,22 @@ public class AlumnoService {
     }
 
     public Alumno updateAlumno(int alumnoId, Alumno alumno) {
-        if (alumnoRepository.existsById(alumnoId)) {
-            alumno.setId(alumnoId);
-            return alumnoRepository.update(alumno);
+        Alumno existingAlumno = alumnoRepository.findById(alumnoId).orElse(null);
+        if (existingAlumno != null) {
+            existingAlumno.setNombres(alumno.getNombres());
+            existingAlumno.setApellidos(alumno.getApellidos());
+            existingAlumno.setMatricula(alumno.getMatricula());
+            existingAlumno.setPromedio(alumno.getPromedio());
+            return alumnoRepository.save(existingAlumno);
         } else {
             return null;
         }
     }
 
     public boolean deleteAlumno(int alumnoId) {
-         if (alumnoRepository.existsById(alumnoId)) {
-            return alumnoRepository.deleteById(alumnoId);
+        if (alumnoRepository.existsById(alumnoId)) {
+            alumnoRepository.deleteById(alumnoId);
+            return true;
         } else {
             return false;
         }
