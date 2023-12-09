@@ -23,17 +23,22 @@ public class ProfesorService {
     }
 
     public Profesor updateProfesor(int profesorId, Profesor Profesor) {
-        if (profesorRepository.existsById(profesorId)) {
-            Profesor.setId(profesorId);
-            return profesorRepository.update(Profesor);
+        Profesor existingProfesor = profesorRepository.findById(profesorId).orElse(null);
+        if (existingProfesor != null) {
+            existingProfesor.setNumeroEmpleado(Profesor.getNumeroEmpleado());
+            existingProfesor.setNombres(Profesor.getNombres());
+            existingProfesor.setApellidos(Profesor.getApellidos());
+            existingProfesor.setHorasClase(Profesor.getHorasClase());
+            return profesorRepository.save(existingProfesor);
         } else {
             return null;
         }
     }
 
     public boolean deleteProfesor(int profesorId) {
-         if (profesorRepository.existsById(profesorId)) {
-            return profesorRepository.deleteById(profesorId);
+        if (profesorRepository.existsById(profesorId)) {
+            profesorRepository.deleteById(profesorId);
+            return true;
         } else {
             return false;
         }
