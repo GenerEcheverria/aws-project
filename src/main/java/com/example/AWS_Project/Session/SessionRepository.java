@@ -44,8 +44,6 @@ public class SessionRepository {
     
         if (!sessions.isEmpty()) {
             Session sessionToUpdate = sessions.get(sessions.size() - 1);
-            System.out.println(sessionToUpdate);
-            System.out.println(sessionString);
             if (sessionToUpdate.getSessionString().equals(sessionString)) {
                 sessionToUpdate.setActive(false);
                 dynamoDBMapper.save(sessionToUpdate);

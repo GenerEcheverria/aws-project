@@ -22,5 +22,6 @@ public class Alumno {
     private String apellidos;
     private String matricula;
     private double promedio;
+    private String fotoPerfilUrl;
     private String password;
 }

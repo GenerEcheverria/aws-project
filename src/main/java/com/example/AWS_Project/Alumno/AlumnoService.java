@@ -29,6 +29,7 @@ public class AlumnoService {
             existingAlumno.setApellidos(alumno.getApellidos());
             existingAlumno.setMatricula(alumno.getMatricula());
             existingAlumno.setPromedio(alumno.getPromedio());
+            existingAlumno.setFotoPerfilUrl(alumno.getFotoPerfilUrl());
             existingAlumno.setPassword(alumno.getPassword());
             return alumnoRepository.save(existingAlumno);
         } else {
