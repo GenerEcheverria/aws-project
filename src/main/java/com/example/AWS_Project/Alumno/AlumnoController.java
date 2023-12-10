@@ -100,8 +100,8 @@ public class AlumnoController {
         }
     }
 
-    @PostMapping(path="/{id}/fotoPerfil", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
-    public ResponseEntity<Object> subirFotoPerfil(@RequestParam("fotoPerfilUrl") MultipartFile foto, @PathVariable int id){
+    @PostMapping(path="/{id}/fotoPerfil",  produces = "application/json")
+    public ResponseEntity<Object> subirFotoPerfil(@RequestParam("foto") MultipartFile foto, @PathVariable int id){
         try{
             Optional<Alumno> alumno = alumnoService.getAlumnoById(id);
             if(alumno.isPresent()){

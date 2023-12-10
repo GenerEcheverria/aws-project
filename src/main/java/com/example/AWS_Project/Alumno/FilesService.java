@@ -1,7 +1,6 @@
 package com.example.AWS_Project.Alumno;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import com.example.AWS_Project.Credentials;
 
 import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -10,16 +9,10 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 public class FilesService {
     private S3Client s3Client;
-    private final String BUCKET_NAME = "aws-project-120035";
-    @Value("${amazon.dynamodb.access-key}")
-    private String amazonAWSAccessKey;
-    @Value("${amazon.dynamodb.secret-key}")
-    private String amazonAWSSecretKey;
-    @Value("${amazon.dynamodb.session-token}")
-    private String amazonAWSessionToken;
+    private final String BUCKET_NAME = "aws-project-12003522";
 
     public FilesService() {
-        AwsSessionCredentials awsCredentials = AwsSessionCredentials.create(amazonAWSAccessKey, amazonAWSSecretKey, amazonAWSessionToken);
+        AwsSessionCredentials awsCredentials = AwsSessionCredentials.create(Credentials.ACCESS_KEY, Credentials.SECRET_KEY, Credentials.SESSION_TOKEN);
 
         s3Client = S3Client.builder()
             .region(Region.US_EAST_1)
